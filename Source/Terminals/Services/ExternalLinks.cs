@@ -127,22 +127,32 @@ namespace Terminals.Services
 
         internal static void OpenTerminalServiceCommandPrompt(IConnectionExtra terminal, string psexecLocation)
         {
-            String sessionId = String.Empty;
-            if (!terminal.ConnectToConsole)
+            try
             {
-                sessionId = TSManager.GetCurrentSession(terminal.Server,
-                    terminal.UserName,
-                    terminal.Domain,
-                    Environment.MachineName).Id.ToString();
-            }
+                String sessionId = String.Empty;
+                if (!terminal.ConnectToConsole)
+                {
+                    sessionId = TSManager.GetCurrentSession(terminal.Server,
+                        terminal.UserName,
+                        terminal.Domain,
+                        Environment.MachineName).Id.ToString();
+                }
 
-            var process = new Process();
-            String args = String.Format(" \\\\{0} -i {1} -d cmd", terminal.Server, sessionId);
-            var startInfo = new ProcessStartInfo(psexecLocation, args);
-            startInfo.UseShellExecute = false;
-            startInfo.CreateNoWindow = true;
-            process.StartInfo = startInfo;
-            process.Start();
+                var process = new Process();
+                String args = String.Format(" \\\\{0} -i {1} -d cmd", terminal.Server, sessionId);
+                var startInfo = new ProcessStartInfo(psexecLocation, args);
+                startInfo.UseShellExecute = false;
+                startInfo.CreateNoWindow = true;
+                process.StartInfo = startInfo;
+                process.Start();
+
+            }
+            catch (Exception ex)
+            {
+                string message = String.Format("Could not open the service command prompt.");
+                MessageBox.Show(message);
+                Logging.Error(message, ex);
+            }
         }
     }
 }

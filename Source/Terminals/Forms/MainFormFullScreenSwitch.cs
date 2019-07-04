@@ -53,7 +53,7 @@ namespace Terminals
                 this.SetFullScreen(goFullScreen);
                 mainForm.menuLoader.UpdateSwitchFullScreenMenuItemsVisibility(this.fullScreen);
 
-                if (!goFullScreen)
+                if (goFullScreen)
                     mainForm.LoadWindowState();
 
                 this.fullScreen = goFullScreen;
